@@ -1,0 +1,6 @@
+[
+  {"symbol": "ACME", "name": "Acme Robotics (fictional)", "price": 41.20, "change_pct": -6.3, "high_52w": 78.00, "low_52w": 40.10, "pe": 18.4, "analyst_target": 60.00},
+  {"symbol": "NIMB", "name": "Nimbus Cloud (fictional)", "price": 212.50, "change_pct": 1.1, "high_52w": 215.00, "low_52w": 130.00, "pe": 44.0, "analyst_target": 230.00},
+  {"symbol": "TERR", "name": "Terra Foods (fictional)", "price": 88.00, "change_pct": 0.4, "high_52w": 110.00, "low_52w": 70.00, "pe": 21.7, "analyst_target": 95.00},
+  {"symbol": "VOLT", "name": "Voltline Energy (fictional)", "price": 15.80, "change_pct": -0.9, "high_52w": 24.00, "low_52w": 12.50, "pe": null, "analyst_target": 19.00}
+]
