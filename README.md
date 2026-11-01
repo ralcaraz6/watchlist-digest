@@ -27,7 +27,7 @@ ACME Acme Robotics (fictional): 41.20 (-6.3%)
 Try it with made-up data (no API key needed):
 
 ```bash
-git clone https://github.com/Rogelio6/watchlist-digest.git
+git clone https://github.com/ralcaraz6/watchlist-digest.git
 cd watchlist-digest
 PYTHONPATH=src python3 -m watchlist_digest --demo
 ```
