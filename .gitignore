@@ -1,6 +1,6 @@
 # Secrets and personal config
 .env
-watchlist.toml
+/watchlist.toml
 
 # Generated
 .cache/

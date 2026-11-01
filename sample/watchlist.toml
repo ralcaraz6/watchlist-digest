@@ -1,0 +1,21 @@
+# Demo watchlist. Tickers and numbers are made up (see snapshots.json).
+[settings]
+move_threshold_pct = 4.0
+near_low_pct = 5.0
+near_high_pct = 2.0
+
+[[ticker]]
+symbol = "ACME"
+buy_below = 45
+note = "Thesis: margins recover in 2027. Re-check after earnings."
+
+[[ticker]]
+symbol = "NIMB"
+sell_above = 210
+
+[[ticker]]
+symbol = "TERR"
+
+[[ticker]]
+symbol = "VOLT"
+buy_below = 14
