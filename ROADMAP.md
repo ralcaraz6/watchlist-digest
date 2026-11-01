@@ -9,11 +9,15 @@ What I plan to build next, roughly in order. Estimates are honest guesses.
 - [x] Markdown digest, alerts first, quiet names in a table
 - [x] `--demo` mode with made-up data, unit tests for the rules
 
-## Next: get it to me every morning (~8 h)
-- [ ] Send the digest by email (SMTP, HTML body) — 3 h
+## Done (v0.2): get it to me every morning
+- [x] Run on GitHub Actions every weekday after the US close, API key and watchlist as secrets
+- [x] Post each digest as a comment on a "Daily digest" issue, so GitHub emails it to me
+- [x] Manual run with a `demo` switch to test the pipeline without a key
+
+## Next: better delivery (~6 h)
+- [ ] Proper HTML email (SMTP) with a cleaner layout than an issue comment — 3 h
 - [ ] Send a short version to Telegram — 2 h
-- [ ] Run daily on GitHub Actions with the API key as a secret — 2 h
-- [ ] Weekday-only schedule, skip market holidays — 1 h
+- [ ] Skip US market holidays — 1 h
 
 ## Then: more signal, less noise (~12 h)
 - [ ] Upcoming earnings within 7 days (EARNINGS_CALENDAR) — 2 h

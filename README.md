@@ -42,6 +42,17 @@ PYTHONPATH=src python3 -m watchlist_digest --out digest.md
 
 Or install it: `pip install -e .` and then `watchlist-digest --demo`.
 
+## Run it every weekday (GitHub Actions)
+
+The workflow in `.github/workflows/daily-digest.yml` runs after the US close and posts the digest as a comment on a "Daily digest" issue; GitHub then emails it to whoever watches the repo.
+
+1. In the repo: Settings > Secrets and variables > Actions, add
+   - `ALPHAVANTAGE_API_KEY`: your key
+   - `WATCHLIST_TOML`: the contents of your `watchlist.toml` (kept out of the public repo)
+2. Actions > Daily digest > Run workflow (tick `demo` first to test the pipeline without a key).
+
+The Alpha Vantage free tier allows 25 requests a day and each ticker uses 2, so keep the watchlist to about 12 names on that tier.
+
 ## Tests
 
 ```bash
@@ -50,7 +61,7 @@ python3 -m unittest discover -s tests
 
 ## Plans
 
-See [ROADMAP.md](ROADMAP.md): email and Telegram delivery, a daily GitHub Actions run, earnings dates, history in SQLite, headlines.
+See [ROADMAP.md](ROADMAP.md): HTML email and Telegram delivery, earnings dates, history in SQLite, headlines.
 
 ## License
 
