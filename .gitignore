@@ -1,0 +1,12 @@
+# Secrets and personal config
+.env
+watchlist.toml
+
+# Generated
+.cache/
+digest*.md
+__pycache__/
+*.egg-info/
+.venv/
+dist/
+build/
