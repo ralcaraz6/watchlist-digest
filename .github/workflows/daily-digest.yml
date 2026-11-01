@@ -1,0 +1,65 @@
+name: Daily digest
+
+# Weekdays after the US close (21:47 UTC), so the digest waits in my inbox in the morning.
+on:
+  schedule:
+    - cron: "47 21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: "Use made-up sample data and skip posting (pipeline test)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build demo digest
+        if: ${{ inputs.demo }}
+        run: PYTHONPATH=src python -m watchlist_digest --demo --out digest.md
+
+      - name: Build digest
+        if: ${{ !inputs.demo }}
+        env:
+          ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+          WATCHLIST_TOML: ${{ secrets.WATCHLIST_TOML }}
+        run: |
+          if [ -z "$ALPHAVANTAGE_API_KEY" ]; then
+            echo "::error::Add the ALPHAVANTAGE_API_KEY repository secret (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          if [ -n "$WATCHLIST_TOML" ]; then
+            printf '%s\n' "$WATCHLIST_TOML" > watchlist.toml
+          else
+            echo "::warning::No WATCHLIST_TOML secret, using watchlist.example.toml."
+            cp watchlist.example.toml watchlist.toml
+          fi
+          PYTHONPATH=src python -m watchlist_digest --watchlist watchlist.toml --out digest.md
+
+      - name: Show digest in the run summary
+        run: cat digest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Post to the digest issue
+        if: ${{ !inputs.demo }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create digest --color 3FB68B --description "Daily watchlist digest" --force
+          n=$(gh issue list --label digest --state open --json number --jq '.[0].number // empty')
+          if [ -z "$n" ]; then
+            url=$(gh issue create --title "Daily watchlist digest" --label digest \
+              --body "Each weekday's digest is posted as a comment here. Watch this issue to get it by email.")
+            n=${url##*/}
+          fi
+          gh issue comment "$n" --body-file digest.md
