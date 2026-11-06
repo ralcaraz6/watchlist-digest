@@ -2,7 +2,8 @@
 [settings]
 move_threshold_pct = 4.0   # flag daily moves of this size or more
 near_low_pct = 5.0         # flag when within 5% of the 52-week low
-near_high_pct = 2.0        # flag when within 2% of the 52-week high
+near_high_pct = 2.0         # flag when within 2% of the 52-week high
+earnings_window_days = 7    # flag earnings reports in the next 7 days
 
 [[ticker]]
 symbol = "MSFT"

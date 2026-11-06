@@ -1,11 +1,14 @@
 """Market data sources: Alpha Vantage (live) and a local fixture (demo/tests)."""
 from __future__ import annotations
 
+import csv
+import io
 import json
 import time
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from datetime import date, timedelta
 from pathlib import Path
 
 AV_URL = "https://www.alphavantage.co/query"
@@ -25,6 +28,7 @@ class Snapshot:
     low_52w: float | None
     pe: float | None
     analyst_target: float | None
+    next_earnings: date | None = None
 
 
 def _num(value) -> float | None:
@@ -51,6 +55,10 @@ class FixtureSource:
             low_52w=r.get("low_52w"),
             pe=r.get("pe"),
             analyst_target=r.get("analyst_target"),
+            next_earnings=(
+                date.today() + timedelta(days=r["earnings_in_days"])
+                if r.get("earnings_in_days") is not None else None
+            ),
         )
 
 
@@ -64,6 +72,7 @@ class AlphaVantage:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.ttl = ttl_hours * 3600
+        self._earnings: dict[str, date] | None = None
 
     def _get(self, **params) -> dict:
         key = "_".join(f"{k}-{v}" for k, v in sorted(params.items()))
@@ -78,6 +87,33 @@ class AlphaVantage:
             raise RateLimited(message)
         path.write_text(json.dumps(data))
         return data
+
+    def earnings_dates(self) -> dict[str, date]:
+        """Next report date per symbol, from ONE call for the whole market (saves quota)."""
+        if self._earnings is not None:
+            return self._earnings
+        path = self.cache_dir / "earnings_calendar_3month.csv"
+        if path.exists() and time.time() - path.stat().st_mtime < self.ttl:
+            text = path.read_text()
+        else:
+            url = AV_URL + "?" + urllib.parse.urlencode(
+                {"function": "EARNINGS_CALENDAR", "horizon": "3month", "apikey": self.api_key})
+            with urllib.request.urlopen(url, timeout=60) as resp:
+                text = resp.read().decode("utf-8")
+            if not text.startswith("symbol"):
+                raise RateLimited(text[:200])
+            path.write_text(text)
+        out: dict[str, date] = {}
+        for row in csv.DictReader(io.StringIO(text)):
+            try:
+                d = date.fromisoformat(row["reportDate"])
+            except (KeyError, ValueError):
+                continue
+            sym = row.get("symbol", "")
+            if sym and (sym not in out or d < out[sym]):
+                out[sym] = d
+        self._earnings = out
+        return out
 
     def snapshot(self, symbol: str) -> Snapshot:
         quote = self._get(function="GLOBAL_QUOTE", symbol=symbol).get("Global Quote", {})
@@ -94,4 +130,13 @@ class AlphaVantage:
             low_52w=_num(overview.get("52WeekLow")),
             pe=_num(overview.get("PERatio")),
             analyst_target=_num(overview.get("AnalystTargetPrice")),
+            next_earnings=self._safe_earnings().get(symbol),
         )
+
+    def _safe_earnings(self) -> dict[str, date]:
+        # Earnings dates are a bonus: a failed calendar call never breaks the digest.
+        try:
+            return self.earnings_dates()
+        except Exception:
+            self._earnings = {}
+            return self._earnings

@@ -52,7 +52,7 @@ def main(argv: list[str] | None = None) -> int:
     rows, errors = [], {}
     for t in tickers:
         try:
-            rows.append(evaluate(source.snapshot(t.symbol), t, settings))
+            rows.append(evaluate(source.snapshot(t.symbol), t, settings, date.today()))
         except RateLimited as e:
             errors[t.symbol] = f"rate limited ({e})"
             break

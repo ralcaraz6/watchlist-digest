@@ -3,6 +3,7 @@
 move_threshold_pct = 4.0
 near_low_pct = 5.0
 near_high_pct = 2.0
+earnings_window_days = 7
 
 [[ticker]]
 symbol = "ACME"
