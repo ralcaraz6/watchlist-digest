@@ -45,12 +45,13 @@ Or install it: `pip install -e .` and then `watchlist-digest --demo`.
 
 ## Run it every weekday (GitHub Actions)
 
-The workflow in `.github/workflows/daily-digest.yml` runs after the US close and posts the digest as a comment on a "Daily digest" issue; GitHub then emails it to whoever watches the repo.
+The workflow in `.github/workflows/daily-digest.yml` posts the digest as a comment on a "Daily digest" issue; GitHub then emails it to whoever watches the repo. The weekday schedule is switched off until the API key secret is in place: step 3 turns it on.
 
 1. In the repo: Settings > Secrets and variables > Actions, add
    - `ALPHAVANTAGE_API_KEY`: your key
    - `WATCHLIST_TOML`: the contents of your `watchlist.toml` (kept out of the public repo)
 2. Actions > Daily digest > Run workflow (tick `demo` first to test the pipeline without a key).
+3. Put the `schedule` lines back in the workflow (they are commented at the top) to run it every weekday.
 
 The Alpha Vantage free tier allows 25 requests a day and each ticker uses 2, so keep the watchlist to about 12 names on that tier.
 

@@ -1,9 +1,10 @@
 name: Daily digest
 
-# Weekdays after the US close (21:47 UTC), so the digest waits in my inbox in the morning.
+# Manual runs only for now. To run every weekday after the US close (21:47 UTC),
+# add the ALPHAVANTAGE_API_KEY secret and put these two lines back under "on:":
+#   schedule:
+#     - cron: "47 21 * * 1-5"
 on:
-  schedule:
-    - cron: "47 21 * * 1-5"
   workflow_dispatch:
     inputs:
       demo:
