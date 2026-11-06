@@ -62,7 +62,7 @@ python3 -m unittest discover -s tests
 
 ## Plans
 
-See [ROADMAP.md](ROADMAP.md): HTML email and Telegram delivery, earnings dates, history in SQLite, headlines.
+See [ROADMAP.md](ROADMAP.md): HTML email and Telegram delivery, history in SQLite, headlines.
 
 ## License
 
