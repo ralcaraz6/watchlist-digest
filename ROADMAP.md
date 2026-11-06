@@ -20,7 +20,7 @@ What I plan to build next, roughly in order. Estimates are honest guesses.
 - [ ] Skip US market holidays — 1 h
 
 ## Then: more signal, less noise (~12 h)
-- [ ] Upcoming earnings within 7 days (EARNINGS_CALENDAR) — 2 h
+- [x] Upcoming earnings within 7 days (EARNINGS_CALENDAR, one call per run)
 - [ ] Store daily snapshots in SQLite; show 1-week and 1-month change — 4 h
 - [ ] Headlines per flagged ticker (NEWS_SENTIMENT), max 3 each — 3 h
 - [ ] Thesis review dates: remind me when a note is older than N days — 2 h

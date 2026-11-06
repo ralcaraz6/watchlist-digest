@@ -18,6 +18,7 @@ ACME Acme Robotics (fictional): 41.20 (-6.3%)
 ```
 
 - Alerts on big daily moves, proximity to the 52-week low/high, and my own buy/sell levels
+- Flags earnings reports coming up in the next 7 days (one API call for the whole watchlist)
 - Shows P/E and upside to the analyst target for the quiet names
 - Caches API responses so a full run fits the Alpha Vantage free tier
 - No holdings, no account data: only public prices and the levels I write in my watchlist
